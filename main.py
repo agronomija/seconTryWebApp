@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from sqla_wrapper import SQLAlchemy
-import hangman
+from hangman import Hangman, choose_secret_word
 
 
 app = Flask(__name__)
@@ -19,6 +19,8 @@ class Vislice(db.Model):
 
 db.create_all()
 
+
+#def get_data_from_db()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -46,11 +48,15 @@ def about_me():
 
 @app.route('/hangman')
 def hangman():
+    beseda = choose_secret_word('words.txt')
     user_name = request.cookies.get('user_name')
     sporocilo = 'Prosim vpišite svoje uporabniško ime za nadaljevanje!'
     if not user_name:
         user_name = None
         return render_template('home.html', sporocilo=sporocilo)
+
+    #igralec = Hangman()
+
 
     return render_template('hangman.html', user_name=user_name)
 

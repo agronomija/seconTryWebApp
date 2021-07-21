@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+hangman
+{% endblock title %}
+
+{% block glavnina %}
+
+  <h1>hangman</h1>
+  <form action="/hangman" method="post">
+      <label for="letter">Vpiši črko: </label>
+      <input type="text" name="guessed_number" id="letter">
+  </form>
+{% endblock glavnina %}

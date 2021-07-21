@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}
+home
+{% endblock title %}
+
+{% block glavnina %}
+{% if user_name %}
+<p>Pozdravljen {{user_name}}. Izberite si eno izmed iger, ali preberi več o meni</p>
+<a href="/fizz-buzz">fizz-buzz</a><br>
+<a href="/hangman">hangman</a><br>
+<a href="/tic-tac-toe">tic-tac-toe</a><br>
+<a href="/about_me">About me</a><br>
+
+<form action="/" method="post">
+  <p>Izpiši me..klikni dvakrat v razmaku ene sekunde ;)</p>
+  <input type="submit" name="izpis" value="izpiši me">
+</form>
+
+{% else %}
+  {% if sporocilo %}
+    <p>{{sporocilo}}</p>
+  {% endif %}
+  <h2>Najprej si morate izbrati ime.</h2>
+  <form method="post" action="/">
+    <input type="text" name="user_name" placeholder="write your username" required>
+    <input type="submit">
+  </form>
+{% endif %}
+
+{% endblock glavnina %}

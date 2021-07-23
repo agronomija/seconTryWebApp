@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+login
+{% endblock title %}
+
+{% block glavnina %}
+
+{% if enak_username_email %}
+  <p>{{enak_username_email}}</p>
+{% elif enak_email %}
+  <p>{{enak_email}}</p>
+{% elif enak_username %}
+  <p>{{enak_username}}</p>
+{% endif %}
+
+{% if nihce_vpisan %}
+  <p>{{nihce_vpisan}}</p>
+{% endif %}
+<form method="post" action="/register">
+    <input type="text" name="user-name" placeholder="enter username">
+    <input type="email" name="user-email" placeholder="email@test.com">
+    <input type="password" name="user-password" placeholder="enter password">
+    <button type="submit" value="vpisi me">Vpiši me</button>
+</form>
+
+
+{% endblock glavnina %}

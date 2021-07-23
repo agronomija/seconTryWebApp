@@ -4,6 +4,25 @@ about_me
 {% endblock title %}
 
 {% block glavnina %}
+  <h1>about me-začetna stran</h1>
 
-<h1>about me</h1>
+  {% if user_name %}
+    <p>Pozdravljen {{user_name}}. Izberi si kaj želiš:</p>
+
+
+  {% elif ze_vpisan%}
+    <p>{{ze_vpisan}}</p>
+
+  {% else %}
+    <p>Pozdravljen neznanec. Za igranje iger se moraš najprej loginati ali signinati..</p>
+  {% endif %}
+
+
+
+  <a href="/signin" name="signin">Vpiši me</a><br>
+  <a href="/register" name="login">Registriraj me</a><br>
+  <a href="/" name="izpis">Izpiši me</a>
+  <a href="#">Hangman</a><br>
+  <a href="#">tic-tac-toe</a>
+
 {% endblock glavnina %}

@@ -8,22 +8,52 @@ hangman
 
   {% if piskotek %}
     <p>Pozdravljen {{piskotek}}. Na vrsti si, da izberes črko</p>
+    <p>Beseda, ki jo iščemo je {{prikaz_besede}}</p>
 
     <form method="post" action="/hangman">
-      <input type="text" name="ugibana_crka"><br>
+      <input type="text" name="ugibana-crka"><br>
       <button type="submit">Poiskusi</button>
     </form><br>
 
 
     <a href="/">Nazaj na prvo stran</a>
 
+  {% elif zmaga %}
+    <h1>Bravo ugotovil si besedo. Iskana beseda je bila {{iskana_beseda}}</h1>
+    <p>za ugotovitev si porabil {{poizkusi}} poizkusov, od tega je bilo {{napacni_poizkusi}} poizkusov.</p>
+    <a href="#">Igraj še enkrat</a>
+    <a href="#">Nazaj na prvo stran</a>
+
+  {% elif poraz %}
+    <h1>Prekoračil si število poizkusov. Iskana beseda je bila {{iskana_beseda}}</h1>
+    <p>porabil si {{poizkusi}} poizkusov, od tega je bilo {{napacni_poizkusi}} poizkusov.</p>
+    <a href="#">Igraj še enkrat</a>
+    <a href="#">Nazaj na prvo stran</a>
+
+  {% elif igraj_naprej %}
+     <p>Dosedanje črke: {{prikaz}}</p>
+     <p>Do sedaj si poizkusil {{poizkusi}} krat.</p>
+     <p>Dosedanje število napačnih poizkusov je {{napacni_poizkusi}}</p>
+
+     <form method="post" action="/hangman">
+      <input type="text" name="ugibana-crka"><br>
+      <button type="submit">Poiskusi</button>
+    </form><br>
+
   {% elif ni_piskotka %}
     <h3>za nadaljevanje se je potrebno vpisati</h3>
     <a href="/">Nazaj na prvo stran</a>
 
+  {% elif napacen_znak %}
+    <h1>Vnesli ste napačen znak..vpišete lahko le eno črko</h1>
+     <p>Dosedanje črke: {{prikaz}}</p>
+     <p>Do sedaj si poizkusil {{poizkusi}} krat.</p>
+     <p>Dosedanje število napačnih poizkusov je {{napacni_poizkusi}}</p>
 
-
-
+     <form method="post" action="/hangman">
+      <input type="text" name="ugibana-crka"><br>
+      <button type="submit">Poiskusi</button>
+    </form><br>
 
 
   {% else %}

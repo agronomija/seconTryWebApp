@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from sqla_wrapper import SQLAlchemy
-from hangman import Hangman, choose_secret_word
+from hangman import Hangman, choose_secret_word, show_known_letters, check_guessed_letter
 
 
 app = Flask(__name__)
@@ -14,6 +14,7 @@ class User(db.Model):
     guessed_letters = db.Column(db.String, unique=False)
     number_of_tries = db.Column(db.Integer, unique=False)
     missed_tries = db.Column(db.Integer, unique=False)
+    correct_letters = db.Column(db.String, unique=False)
     user_name = db.Column(db.String, unique=True)
     user_password = db.Column(db.String, unique=False)
     user_email = db.Column(db.String, unique=True)
@@ -127,19 +128,129 @@ def logout():
 def hangman():
     piskotek = request.cookies.get('user_name_test')
     ni_piskotka = 'Za nadaljevanje se morate vpisati'
+    beseda = choose_secret_word('words.txt')
     if request.method == 'GET':
         if piskotek:
-            return render_template('hangman.html', piskotek=piskotek)
+            user = db.query(User).filter_by(user_name=piskotek).first()
+            user.secret_word = beseda
+            print('število number of tries...', user.number_of_tries)
+            user.save()
+            prikaz_besede = show_known_letters(beseda, user.guessed_letters)
+            return render_template('hangman.html', piskotek=piskotek, prikaz_besede=prikaz_besede)
         else:
             return render_template('hangman.html', ni_piskotka=ni_piskotka)
 
-    #elif request.method == 'POST':
+    elif request.method == 'POST':
+        uporabnik = request.cookies.get('user_name_test')
+        ugibana_crka = request.form.get('ugibana-crka')
+        if check_guessed_letter(ugibana_crka):
+            user = db.query(User).filter_by(user_name=uporabnik).first() #poiscemo uporabnika s dolocenim usernamom v bazi
+
+
+            if user.guessed_letters == None: #če je ravno začel igro
+
+                user.current_guessed_letter = ugibana_crka
+                user.guessed_letters = ''
+                user.number_of_tries = 0
+                user.missed_tries = 0
+                user.correct_letters = ''
+
+                pregled = Hangman(secret_word=user.secret_word, current_guessed_letter=ugibana_crka,
+                                  guessed_letters=user.guessed_letters, number_of_tries=user.number_of_tries,
+                                  missed_tries=user.missed_tries, correct_letters=user.correct_letters)
+
+
+                pregled.save_to_database(user)
+
+                if pregled.check_lose():
+                    iskana_beseda = pregled.secret_word
+                    poizkusi = pregled.number_of_tries
+                    napacni_poizkusi = pregled.missed_tries
+                    poraz = 'poraz'
+
+                    pregled.set_to_zero(user)
+
+                    return render_template('hangman.html', iskana_beseda=iskana_beseda, uporabnik=uporabnik,
+                                           poizkusi=poizkusi,
+                                           napacni_poizkusi=napacni_poizkusi, poraz=poraz)
+
+                elif pregled.check_win():
+
+                    iskana_beseda = pregled.secret_word
+                    poizkusi = pregled.number_of_tries
+                    napacni_poizkusi = pregled.missed_tries
+                    zmaga = 'zmaga'
+
+                    pregled.set_to_zero(user)
+
+                    return render_template('hangman.html', iskana_beseda=iskana_beseda, uporabnik=uporabnik,
+                                            poizkusi=poizkusi,
+                                            napacni_poizkusi=napacni_poizkusi, zmaga=zmaga)
+
+
+                else:
+
+                    iskana_beseda = pregled.secret_word
+                    poizkusi = pregled.number_of_tries
+                    napacni_poizkusi = pregled.missed_tries
+                    igraj_naprej = 'nadaljuj'
+
+                    print(f'user.guessed-letters == None....iskana beseda: {iskana_beseda}, poizkusi: {poizkusi}, napacni_poizkusi: {napacni_poizkusi}')
+                    prikaz = pregled.show_known_letters()
+
+                    return render_template('hangman.html', uporabnik=uporabnik,
+                                           poizkusi=poizkusi,
+                                           napacni_poizkusi=napacni_poizkusi, igraj_naprej=igraj_naprej, prikaz=prikaz)
 
 
 
 
+            elif user.guessed_letters != None:  # če je že igral prej
+
+                pregled = Hangman(secret_word=user.secret_word, current_guessed_letter=ugibana_crka,
+                                  guessed_letters=user.guessed_letters, number_of_tries=user.number_of_tries,
+                                  missed_tries=user.missed_tries, correct_letters=user.correct_letters)
+
+                pregled.save_to_database(user)
+
+                if pregled.check_lose():
+                    iskana_beseda = pregled.secret_word
+                    poizkusi = pregled.number_of_tries
+                    napacni_poizkusi = pregled.missed_tries
+                    poraz = 'poraz'
+
+                    pregled.set_to_zero(user)
+                    return render_template('hangman.html', iskana_beseda=iskana_beseda, uporabnik=uporabnik,
+                                           poizkusi=poizkusi,
+                                           napacni_poizkusi=napacni_poizkusi, poraz=poraz)
+
+                elif pregled.check_win():
+
+                    iskana_beseda = pregled.secret_word
+                    poizkusi = pregled.number_of_tries
+                    napacni_poizkusi = pregled.missed_tries
+                    zmaga = 'zmaga'
+
+                    pregled.set_to_zero(user)
+                    return render_template('hangman.html', iskana_beseda=iskana_beseda, uporabnik=uporabnik,
+                                           poizkusi=poizkusi,
+                                           napacni_poizkusi=napacni_poizkusi, zmaga=zmaga)
 
 
+                else:
+
+                    iskana_beseda = pregled.secret_word
+                    poizkusi = pregled.number_of_tries
+                    napacni_poizkusi = pregled.missed_tries
+                    igraj_naprej = 'nadaljuj'
+                    prikaz = pregled.show_known_letters()
+                    print(f'user.guessed-letters != None.....iskana beseda: {iskana_beseda}, poizkusi: {poizkusi}, napacni_poizkusi: {napacni_poizkusi}')
+                    return render_template('hangman.html', uporabnik=uporabnik,
+                                           poizkusi=poizkusi,
+                                           napacni_poizkusi=napacni_poizkusi, igraj_naprej=igraj_naprej, prikaz=prikaz)
+        else:
+            napacen_znak = 'Vnesli ste napačen znak, sprejemamo le črke.'
+            return render_template('hangman.html', napacen_znak=napacen_znak)
 
 if __name__ == '__main__':
     app.run(use_reloader=True, debug=True)

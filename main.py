@@ -89,9 +89,6 @@ def signin():
             return render_template('signin.html')
 
 
-
-
-
 @app.route('/search_user', methods=['POST'])
 def search_user():
     email = request.form.get('user-email')
@@ -124,6 +121,20 @@ def logout():
     response = make_response(render_template('about_me.html', obvestilo_o_izpisu='Uspešno ste se izpisali'))
     response.set_cookie('user_name_test', expires=0)
     return response
+
+
+@app.route('/hangman', methods=['POST', 'GET'])
+def hangman():
+    piskotek = request.cookies.get('user_name_test')
+    ni_piskotka = 'Za nadaljevanje se morate vpisati'
+    if request.method == 'GET':
+        if piskotek:
+            return render_template('hangman.html', piskotek=piskotek)
+        else:
+            return render_template('hangman.html', ni_piskotka=ni_piskotka)
+
+    #elif request.method == 'POST':
+
 
 
 

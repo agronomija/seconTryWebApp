@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}
+hangman
+{% endblock title %}
+
+{% block glavnina %}
+  <h1>hangman page</h1>
+
+  {% if piskotek %}
+    <p>Pozdravljen {{piskotek}}. Na vrsti si, da izberes črko</p>
+
+    <form method="post" action="/hangman">
+      <input type="text" name="ugibana_crka"><br>
+      <button type="submit">Poiskusi</button>
+    </form><br>
+
+
+    <a href="/">Nazaj na prvo stran</a>
+
+  {% elif ni_piskotka %}
+    <h3>za nadaljevanje se je potrebno vpisati</h3>
+    <a href="/">Nazaj na prvo stran</a>
+
+
+
+
+
+
+  {% else %}
+    <p>Če nič od zgornjega ne drži</p>
+
+  {% endif %}
+
+
+
+
+{% endblock glavnina %}

@@ -20,6 +20,8 @@ class User(db.Model):
 
 db.create_all()
 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'GET': #poskrbi da če je že nekdo vpisan ga napoti na about_me.html in ga pozdravi,
@@ -55,6 +57,7 @@ def register():
 
         if not db.query(User).filter_by(user_name=user_name).first() and not db.query(User).filter_by(user_email=email).first():
             user = User(user_name=user_name, user_email=email, user_password=password)
+            user.save()
             response = make_response(render_template('about_me.html', user_name=user_name))
             response.set_cookie('user_name_test', user_name)
             return response
@@ -75,9 +78,55 @@ def register():
 
 
 
-@app.route('/signin', methods=['POST'])
+@app.route('/signin', methods=['POST', 'GET'])
 def signin():
-    return render_template('about_me.html', tukej='prišel iz /signin routa')
+    if request.method == 'GET':
+        piskotek = request.cookies.get('user_name_test')
+        if piskotek:
+            vpisan = f'Vpisan je {piskotek}, če se želite prijaviti z drugim računom se morate najprej odjaviti.'
+            return render_template('signin.html', vpisan=vpisan)
+        else:
+            return render_template('signin.html')
+
+
+
+
+
+@app.route('/search_user', methods=['POST'])
+def search_user():
+    email = request.form.get('user-email')
+    print(email)
+    password = request.form.get('user-password')
+    print(password)
+
+    user = db.query(User).filter_by(user_email=email).first()
+
+
+
+    if not user:
+        ni_userja = 'Pod temi podatki ni shranjenega nobenega uporabnika'
+        return render_template('signin.html', ni_userja=ni_userja)
+
+    if user and user.user_password == password:
+        response = make_response(render_template('about_me.html', user_name=user.user_name))
+        response.set_cookie('user_name_test', user.user_name)
+        print(user.user_name)
+        return response
+
+
+    return render_template('signin.html', obvestilo='Pod tem emailom in passwordom ni nobenega uporabnika, '
+                                                        'oskusite znova.')
+
+
+@app.route('/logout')
+def logout():
+
+    response = make_response(render_template('about_me.html', obvestilo_o_izpisu='Uspešno ste se izpisali'))
+    response.set_cookie('user_name_test', expires=0)
+    return response
+
+
+
 
 
 

@@ -9,8 +9,11 @@ about_me
   {% if user_name %}
     <p>Pozdravljen {{user_name}}. Izberi si kaj želiš:</p>
 
+  {% elif obvestilo_o_izpisu %}
+    <h3>{{obestilo_o_izpisu}}</h3>
 
-  {% elif ze_vpisan%}
+
+  {% elif ze_vpisan %}
     <p>{{ze_vpisan}}</p>
 
   {% else %}
@@ -21,7 +24,7 @@ about_me
 
   <a href="/signin" name="signin">Vpiši me</a><br>
   <a href="/register" name="login">Registriraj me</a><br>
-  <a href="/" name="izpis">Izpiši me</a>
+  <a href="/logout">Izpiši me</a><br>
   <a href="#">Hangman</a><br>
   <a href="#">tic-tac-toe</a>
 

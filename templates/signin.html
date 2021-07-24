@@ -5,19 +5,23 @@ login
 
 {% block glavnina %}
 
-{% if enak_username_email %}
-  <p>{{enak_username_email}}</p>
-{% elif enak_email %}
-  <p>{{enak_email}}</p>
-{% elif enak_username %}
-  <p>{{enak_username}}</p>
+{% if vpisan %}
+  <p>{{vpisan}}</p><br>
+  <a href="/">Odjavi me</a>
+
+{% elif obvestilo %}
+  <p>{{obvestilo}}</p>
+
+{% elif ni_userja %}
+  <p>{{ni_userja}}</p>
+
+{% else %}
+  <p>Vpišite svoje podatke..</p>
+
 {% endif %}
 
-{% if nihce_vpisan %}
-  <p>{{nihce_vpisan}}</p>
-{% endif %}
-<form method="post" action="/register">
-    <input type="text" name="user-name" placeholder="enter username"><br>
+
+<form method="post" action="/search_user">
     <input type="email" name="user-email" placeholder="email@test.com"><br>
     <input type="password" name="user-password" placeholder="enter password"><br>
     <button type="submit" value="vpisi me">Vpiši me</button>

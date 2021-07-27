@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from sqla_wrapper import SQLAlchemy
 from hangman import Hangman, choose_secret_word, show_known_letters, check_guessed_letter
-
+import os
 
 
 app = Flask(__name__)
-db = SQLAlchemy("sqlite:///db.sqlite")
+db_url = os.getenv("DATABASE_URL", "sqlite:///db.sqlite").replace("postgres://", "postgresql://", 1)
+db = SQLAlchemy(db_url)
 
 
 class User(db.Model):

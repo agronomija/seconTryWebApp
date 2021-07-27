@@ -3,6 +3,7 @@ from sqla_wrapper import SQLAlchemy
 from hangman import Hangman, choose_secret_word, show_known_letters, check_guessed_letter
 
 
+
 app = Flask(__name__)
 db = SQLAlchemy("sqlite:///db.sqlite")
 
@@ -18,6 +19,10 @@ class User(db.Model):
     user_name = db.Column(db.String, unique=True)
     user_password = db.Column(db.String, unique=False)
     user_email = db.Column(db.String, unique=True)
+    user_fb = db.Column(db.String, unique=True)
+
+
+
 
 db.create_all()
 
@@ -124,6 +129,11 @@ def logout():
     return response
 
 
+@app.route('/tic-tac-toe')
+def tic_tac():
+    return render_template('tic-tac-toe.html')
+
+
 @app.route('/hangman', methods=['POST', 'GET'])
 def hangman():
     piskotek = request.cookies.get('user_name_test')
@@ -132,11 +142,20 @@ def hangman():
     if request.method == 'GET':
         if piskotek:
             user = db.query(User).filter_by(user_name=piskotek).first()
-            user.secret_word = beseda
-            print('število number of tries...', user.number_of_tries)
-            user.save()
-            prikaz_besede = show_known_letters(beseda, user.guessed_letters)
-            return render_template('hangman.html', piskotek=piskotek, prikaz_besede=prikaz_besede)
+            if not user.secret_word:
+                user.secret_word = beseda
+
+                print('število number of tries...', user.number_of_tries)
+                user.save()
+                prikaz_besede = show_known_letters(beseda, user.guessed_letters)
+                return render_template('hangman.html', piskotek=piskotek, prikaz_besede=prikaz_besede)
+            if user.secret_word:
+                prikaz_besede = show_known_letters(user.secret_word, user.guessed_letters)
+                dosedanji_poizkusi = user.number_of_tries
+                zgreseni = user.missed_tries
+                dosedanje_crke = user.guessed_letters
+                return render_template('hangman.html', piskotek=piskotek, prikaz_besede=prikaz_besede,
+                                       dosedanji_poizkusi=dosedanji_poizkusi, zgreseni=zgreseni, dosedanje_crke=dosedanje_crke)
         else:
             return render_template('hangman.html', ni_piskotka=ni_piskotka)
 
@@ -238,7 +257,7 @@ def hangman():
 
 
                 else:
-
+                    dosedanje_crke = user.guessed_letters
                     iskana_beseda = pregled.secret_word
                     poizkusi = pregled.number_of_tries
                     napacni_poizkusi = pregled.missed_tries
@@ -247,10 +266,21 @@ def hangman():
                     print(f'user.guessed-letters != None.....iskana beseda: {iskana_beseda}, poizkusi: {poizkusi}, napacni_poizkusi: {napacni_poizkusi}')
                     return render_template('hangman.html', uporabnik=uporabnik,
                                            poizkusi=poizkusi,
-                                           napacni_poizkusi=napacni_poizkusi, igraj_naprej=igraj_naprej, prikaz=prikaz)
+                                           napacni_poizkusi=napacni_poizkusi, igraj_naprej=igraj_naprej, prikaz=prikaz,
+                                           dosedanje_crke=dosedanje_crke)
         else:
             napacen_znak = 'Vnesli ste napačen znak, sprejemamo le črke.'
             return render_template('hangman.html', napacen_znak=napacen_znak)
+
+@app.route('/fizz-buzz', methods=['GET', 'POST'])
+def fizz_buzz():
+    piskotek = request.cookies.get('user_name_test')
+    if request.method == 'GET':
+        if piskotek:
+            user = user = db.query(User).filter_by(user_name=piskotek).first()
+
+        return render_template('fizz-buzz.html',)
+
 
 if __name__ == '__main__':
     app.run(use_reloader=True, debug=True)

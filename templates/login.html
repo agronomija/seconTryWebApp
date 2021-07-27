@@ -17,11 +17,14 @@ login
   <p>{{nihce_vpisan}}</p>
 {% endif %}
 <form method="post" action="/register">
+    <label for="user-name">Vpiši username: </label>
     <input type="text" name="user-name" placeholder="enter username"><br>
+    <label for="user-email">Vpiši svoj email: </label>
     <input type="email" name="user-email" placeholder="email@test.com"><br>
+    <label for="user-password">Vnesi geslo: </label>
     <input type="password" name="user-password" placeholder="enter password"><br>
     <button type="submit" value="vpisi me">Vpiši me</button>
-</form>
+<br>
 
     <a href="/">Nazaj na prvo stran</a>
 

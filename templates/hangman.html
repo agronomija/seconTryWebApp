@@ -4,12 +4,15 @@ hangman
 {% endblock title %}
 
 {% block glavnina %}
-  <h1>hangman page</h1>
+
 
   {% if piskotek %}
     <p>Pozdravljen {{piskotek}}. Na vrsti si, da izberes črko</p>
     <p>Beseda, ki jo iščemo je {{prikaz_besede}}</p>
-
+    {% if dosedanji_poizkusi %}
+    <p>Dosedanji poizkusi: {{dosedanji_poizkusi}}, dosedanji zgrešeni poizkusi: {{zgreseni}}</p>
+    <p>{{ dosedanje_crke }}</p>
+    {% endif %}
     <form method="post" action="/hangman">
       <input type="text" name="ugibana-crka"><br>
       <button type="submit">Poiskusi</button>
@@ -20,21 +23,21 @@ hangman
 
   {% elif zmaga %}
     <h1>Bravo ugotovil si besedo. Iskana beseda je bila {{iskana_beseda}}</h1>
-    <p>za ugotovitev si porabil {{poizkusi}} poizkusov, od tega je bilo {{napacni_poizkusi}} poizkusov.</p>
-    <a href="#">Igraj še enkrat</a>
-    <a href="#">Nazaj na prvo stran</a>
+    <p>za ugotovitev si porabil {{poizkusi}} poizkusov, od tega je bilo {{napacni_poizkusi}} napačnih poizkusov.</p>
+    <a href="/hangman">Igraj še enkrat</a>
+    <a href="/">Nazaj na prvo stran</a>
 
   {% elif poraz %}
     <h1>Prekoračil si število poizkusov. Iskana beseda je bila {{iskana_beseda}}</h1>
-    <p>porabil si {{poizkusi}} poizkusov, od tega je bilo {{napacni_poizkusi}} poizkusov.</p>
-    <a href="#">Igraj še enkrat</a>
-    <a href="#">Nazaj na prvo stran</a>
+    <p>porabil si {{poizkusi}} poizkusov, od tega je bilo {{napacni_poizkusi}} napačnih poizkusov.</p>
+    <a href="/hangman">Igraj še enkrat</a>
+    <a href="/">Nazaj na prvo stran</a>
 
   {% elif igraj_naprej %}
      <p>Dosedanje črke: {{prikaz}}</p>
      <p>Do sedaj si poizkusil {{poizkusi}} krat.</p>
      <p>Dosedanje število napačnih poizkusov je {{napacni_poizkusi}}</p>
-
+     <p>črke, ki si jih že preizkusil: {{dosedanje_crke}}</p>
      <form method="post" action="/hangman">
       <input type="text" name="ugibana-crka"><br>
       <button type="submit">Poiskusi</button>

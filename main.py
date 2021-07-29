@@ -145,7 +145,7 @@ def hangman():
     ni_piskotka = 'Za nadaljevanje se morate vpisati'
     beseda = choose_secret_word('words.txt')
     if request.method == 'GET':
-        if piskotek:
+        if piskotek and db.query(User).filter_by(user_name=piskotek).first(): #nazadnje dodal
             user = db.query(User).filter_by(user_name=piskotek).first()
             if not user.secret_word:
                 user.secret_word = beseda

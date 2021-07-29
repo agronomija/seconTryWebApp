@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}
+messages
+{% endblock title %}
+
+{% block glavnina %}
+{% if sporocilo %}
+  <p>Vpiši svoje sporočilo {{piskotek}}</p>
+
+  <form action="/message" method="post">
+      <textarea name="message">Vpiši sporočilo</textarea>
+      <button type="submit">Potrdi sporočilo</button>
+  </form>
+
+{% elif piskotek %}
+<p>Vpiši svoje sporočilo {{piskotek}}</p>
+
+  <form action="/message" method="post">
+      <textarea name="message">Vpiši sporočilo</textarea>
+      <button type="submit">Potrdi sporočilo</button>
+  </form>
+
+
+{% else %}
+  <p>za komentiranje se moraš najprej vpiati</p>
+  <a href="/">Registriraj se</a>
+{% endif %}
+
+{% if messages %}
+  {% for message in messages %}
+    <h3>{{message.name}}</h3><br>
+    <p>{{message.message}}</p>
+  {% endfor %}
+{% endif %}
+
+
+
+
+
+
+{% endblock glavnina %}

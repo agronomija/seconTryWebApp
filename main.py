@@ -23,6 +23,10 @@ class User(db.Model):
     user_fb = db.Column(db.String, unique=True)
 
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String, unique=False)
+    name = db.Column(db.String, unique=False)
 
 
 db.create_all()
@@ -279,8 +283,38 @@ def fizz_buzz():
     if request.method == 'GET':
         if piskotek:
             user = user = db.query(User).filter_by(user_name=piskotek).first()
+            if not user.user_fb:
+                zacetek = 'start'
+                return render_template('fizz-buzz.html', zacetek=zacetek)
 
         return render_template('fizz-buzz.html',)
+
+
+@app.route('/message', methods=['GET', 'POST'])
+def message():
+    piskotek = request.cookies.get('user_name_test')
+
+    #if request.method == 'GET' and not piskotek:
+        #return render_template('messages.html')
+
+    if request.method == 'GET':
+        return render_template('messages.html', piskotek=piskotek)
+
+    #elif request.method == 'GET' and not piskotek:
+     #   render_template('messages.html')
+
+    elif request.method == 'POST':
+        message = request.form.get('message')
+        messages = Message(message=message, name=piskotek)
+        messages.save()
+
+        messages = db.query(Message).all()
+
+        return render_template('messages.html', messages=messages, piskotek=piskotek)
+
+
+
+
 
 
 if __name__ == '__main__':

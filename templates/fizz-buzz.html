@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}
+about_me
+{% endblock title %}
+
+{% block glavnina %}
+   {% if zacetek %}
+     <p>vnesi naslednjo vrednost..</p>
+     <form>
+         <input type="radio" name="fizz" value>
+         <input type="radio" name="buzz">
+         <input type="radio" name="fizz-buzz">
+         <input type="text" name="number">
+     </form>
+   {% endif %}
+
+
+
+{% endblock glavnina %}

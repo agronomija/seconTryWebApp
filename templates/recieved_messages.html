@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+recieved_messages
+{% endblock title %}
+
+{% block glavnina %}
+
+
+
+
+
+
+
+
+
+{% if sporocila %}
+
+  {% for sporocilo in sporocila %}
+    {% if sporocilo.reciever == piskotek %}
+    <div class="privat-sporocila">
+      <p><strong>pošiljatelj: </strong> {{sporocilo.sender}}</p>
+      <p><strong>naslov: </strong> {{sporocilo.title}}</p>
+      <p><strong>sporočilo: </strong> {{sporocilo.message}}</p>
+    </div>
+     {% endif %}
+ {% else %}
+  <p>Sporočilo je bilo uspešno poslano uporabniku {{reciever}}</p><br>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+{% endblock glavnina %}

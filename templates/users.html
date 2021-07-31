@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+users
+{% endblock title %}
+
+{% block glavnina %}
+
+
+
+
+
+
+
+
+
+{% if users %}
+  <h2>uporabniška imena vseh uporabnikov. napiši jim sporočilo</h2>
+  {% for user in users %}
+    {% if piskotek == user.user_name %}
+      <p>to si ti</p>
+    {% else %}
+      <a href="/users/{{user.user_name}}">{{user.user_name}}</a><br>
+    {% endif %}
+  {% endfor %}
+ {% else %}
+  <p>Baza s podatki je prazna...</p>
+{% endif %}
+
+
+
+
+
+{% endblock glavnina %}

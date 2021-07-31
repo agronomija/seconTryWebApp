@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}
+user_message
+{% endblock title %}
+
+{% block glavnina %}
+  <p>Pošiljaš {{user_name}}-u</p>
+<form action="/sent_unsent" method="post">
+    <input name="reciever" placeholder="komu pošiljaš"><br>
+    <input type="text" placeholder="title" name="title"><br>
+    <textarea name="message" placeholder="your message"></textarea><br>
+    <button>Pošlji</button>
+</form>
+
+
+
+
+
+
+
+
+
+{% endblock glavnina %}

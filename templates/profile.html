@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}
+about_me
+{% endblock title %}
+
+{% block glavnina %}
+
+
+
+
+  {% if ni_userja %}
+    <h3>{{ni_userja}}</h3>
+    <p>Pozdravljen neznanec. Za ogled profila se moraš najprej loginati ali signinati..</p>
+    <a href=""></a>
+
+  {% elif je_piskotek_ni_userja %}
+    <h3>{{je_piskotek_ni_userja}}</h3>
+
+
+
+
+  {% else %}
+    <div class="profil-border">
+      <h2>Uporabniško ime: {{user_name}}</h2><br>
+      <h2>Email naslov: {{user_email}}</h2>
+    </div>
+
+  {% endif %}
+
+
+<a href="/recieved_messages">Prejeta sporočila</a>
+
+
+
+
+
+{% endblock glavnina %}

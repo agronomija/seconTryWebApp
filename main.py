@@ -5,8 +5,7 @@ import os
 
 
 app = Flask(__name__)
-db_url = os.getenv("DATABASE_URL", "sqlite:///db.sqlite").replace("postgres://", "postgresql://", 1)
-db = SQLAlchemy(db_url)
+db = SQLAlchemy("sqlite:///db.sqlite")
 
 
 class User(db.Model):
@@ -27,6 +26,14 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String, unique=False)
     name = db.Column(db.String, unique=False)
+
+
+class Private_message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String, unique=False)
+    sender = db.Column(db.String, unique=False)
+    reciever = db.Column(db.String, unique=False)
+    title = db.Column(db.String, unique=False)
 
 
 db.create_all()
@@ -282,7 +289,7 @@ def fizz_buzz():
     piskotek = request.cookies.get('user_name_test')
     if request.method == 'GET':
         if piskotek:
-            user = user = db.query(User).filter_by(user_name=piskotek).first()
+            user = db.query(User).filter_by(user_name=piskotek).first()
             if not user.user_fb:
                 zacetek = 'start'
                 return render_template('fizz-buzz.html', zacetek=zacetek)
@@ -311,6 +318,71 @@ def message():
         messages = db.query(Message).all()
 
         return render_template('messages.html', messages=messages, piskotek=piskotek)
+
+
+@app.route('/profile')
+def profile():
+    piskotek = request.cookies.get('user_name_test')
+    if not piskotek:
+        ni_userja = 'Pod tem cookiejam ni shranjenega nobenega userja, znova se prijavi s pravim profilom'
+        return render_template('profile.html', ni_userja=ni_userja)
+
+    elif piskotek and not db.query(User).filter_by(user_name=piskotek).first():
+        je_piskotek_ni_userja = 'Pod tem piskotkom ni prijavljen noben user, zato se znova oprijavite'
+        return render_template('profile.html', je_piskotek_ni_userja=je_piskotek_ni_userja)
+
+    else:
+        user = db.query(User).filter_by(user_name=piskotek).first()
+        user_name = user.user_name
+        user_email = user.user_email
+
+        return render_template('profile.html', user_name=user_name, user_email=user_email)
+
+@app.route('/users')
+def user_search():
+    users = db.query(User).all()
+    piskotek = request.cookies.get('user_name_test')
+
+    return render_template('users.html', users=users, piskotek=piskotek)
+
+@app.route('/users/<user_name>')
+def send_message(user_name):
+
+    return render_template('user_message.html', user_name=user_name)
+
+
+@app.route('/sent_unsent', methods=['GET','POST'])
+def sent_unsent():
+    #reciever = request.form.get('reciever')
+    sender = request.cookies.get('user_name_test')
+    message = request.form.get('message')
+    #title = reciever.form.get('title')
+    #user = db.query(User).get(reciever)
+    if request.method == 'POST':
+        reciever = request.form.get('reciever')
+        message = request.form.get('message')
+        title = request.form.get('title')
+        user = db.query(User).filter_by(user_name=reciever).first()
+        if not user:
+            no_user = 'Pod tem imenom ni nobenega uporabnika'
+            return render_template('sent_unsent.html', no_user=no_user)
+
+        else:
+            sporocilo = Private_message(message=message, reciever=reciever, sender=sender, title=title)
+            sporocilo.save()
+
+            return render_template('sent_unsent.html', reciever=reciever)
+
+
+
+@app.route('/recieved_messages')
+def recieved_messages():
+    sporocila = db.query(Private_message).all()
+    piskotek = request.cookies.get('user_name_test')
+    return render_template('recieved_messages.html', sporocila=sporocila, piskotek=piskotek)
+
+
+
 
 
 

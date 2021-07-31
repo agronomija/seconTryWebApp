@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+users
+{% endblock title %}
+
+{% block glavnina %}
+
+
+
+
+
+
+
+
+
+{% if no_user %}
+  <h2>{{no_user}}</h2>
+
+ {% else %}
+  <p>Sporočilo je bilo uspešno poslano uporabniku {{reciever}}</p><br>
+{% endif %}
+
+
+
+
+
+{% endblock glavnina %}

@@ -305,7 +305,8 @@ def message():
         #return render_template('messages.html')
 
     if request.method == 'GET':
-        return render_template('messages.html', piskotek=piskotek)
+        messages = db.query(Message).all()
+        return render_template('messages.html', piskotek=piskotek, messages=messages)
 
     #elif request.method == 'GET' and not piskotek:
      #   render_template('messages.html')

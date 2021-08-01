@@ -348,8 +348,11 @@ def user_search():
 
 @app.route('/users/<user_name>')
 def send_message(user_name):
-
-    return render_template('user_message.html', user_name=user_name)
+    piskotek = request.cookies.get('user_name_test')
+    registreraj_se = 'za nadaljevanje se je potrebno registrirati'
+    if piskotek:
+        return render_template('user_message.html', user_name=user_name)
+    return render_template('user_message.html', registreraj_se=registreraj_se)
 
 
 @app.route('/sent_unsent', methods=['GET','POST'])

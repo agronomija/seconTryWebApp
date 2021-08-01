@@ -4,6 +4,7 @@ user_message
 {% endblock title %}
 
 {% block glavnina %}
+  {% if piskotek %}
   <p>Pošiljaš {{user_name}}-u</p>
 <form action="/sent_unsent" method="post">
     <input name="reciever" placeholder="komu pošiljaš"><br>
@@ -11,6 +12,11 @@ user_message
     <textarea name="message" placeholder="your message"></textarea><br>
     <button>Pošlji</button>
 </form>
+
+  {% else %}
+  <h1>{{registreraj_se}}</h1>
+
+  {% endif %}
 
 
 

@@ -351,7 +351,7 @@ def send_message(user_name):
     piskotek = request.cookies.get('user_name_test')
     registreraj_se = 'za nadaljevanje se je potrebno registrirati'
     if piskotek:
-        return render_template('user_message.html', user_name=user_name)
+        return render_template('user_message.html', user_name=user_name, piskotek=piskotek)
     return render_template('user_message.html', registreraj_se=registreraj_se)
 
 
@@ -384,6 +384,10 @@ def recieved_messages():
     sporocila = db.query(Private_message).all()
     piskotek = request.cookies.get('user_name_test')
     return render_template('recieved_messages.html', sporocila=sporocila, piskotek=piskotek)
+
+@app.route('/cv')
+def cv():
+    return render_template('CV.html')
 
 
 

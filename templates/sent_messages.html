@@ -17,7 +17,7 @@ recieved_messages
 {% elif sporocila %}
 
   {% for sporocilo in sporocila %}
-    {% if sporocilo.reciever == piskotek %}
+    {% if sporocilo.sender == piskotek %}
     <div class="privat-sporocila">
       <p><strong>pošiljatelj: </strong> {{sporocilo.sender}}</p>
       <p><strong>naslov: </strong> {{sporocilo.title}}</p>

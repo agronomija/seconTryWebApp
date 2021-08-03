@@ -7,7 +7,7 @@ user_message
   {% if piskotek %}
   <p>Pošiljaš {{user_name}}-u</p>
 <form action="/sent_unsent" method="post">
-    <input name="reciever" placeholder="komu pošiljaš"><br>
+    <input name="reciever" value="{{user_name}}" type="hidden"><br>
     <input type="text" placeholder="title" name="title"><br>
     <textarea name="message" placeholder="your message"></textarea><br>
     <button>Pošlji</button>

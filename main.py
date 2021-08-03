@@ -342,9 +342,13 @@ def profile():
 @app.route('/users')
 def user_search():
     users = db.query(User).all()
+    print(users[0].user_name)
     piskotek = request.cookies.get('user_name_test')
 
     return render_template('users.html', users=users, piskotek=piskotek)
+
+
+
 
 @app.route('/users/<user_name>')
 def send_message(user_name):
@@ -385,16 +389,16 @@ def recieved_messages():
     piskotek = request.cookies.get('user_name_test')
     return render_template('recieved_messages.html', sporocila=sporocila, piskotek=piskotek)
 
+
+@app.route('/sent_messages')
+def sent_messages():
+    sporocila = db.query(Private_message).all()
+    piskotek = request.cookies.get('user_name_test')
+    return render_template('sent_messages.html', sporocila=sporocila, piskotek=piskotek)
+
 @app.route('/cv')
 def cv():
     return render_template('CV.html')
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':

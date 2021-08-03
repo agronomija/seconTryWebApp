@@ -14,8 +14,11 @@ hangman
     <p>{{ dosedanje_crke }}</p>
     {% endif %}
     <form method="post" action="/hangman">
+     <div class="form-group">
+      <label for="ugibana-crka">vpiši črko</label>
       <input type="text" name="ugibana-crka"><br>
       <button type="submit">Poiskusi</button>
+     </div>
     </form><br>
 
 

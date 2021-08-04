@@ -8,9 +8,16 @@ user_message
   <p>Pošiljaš {{user_name}}-u</p>
 <form action="/sent_unsent" method="post">
     <input name="reciever" value="{{user_name}}" type="hidden"><br>
-    <input type="text" placeholder="title" name="title"><br>
-    <textarea name="message" placeholder="your message"></textarea><br>
-    <button>Pošlji</button>
+    <div class="form-group">
+      <label>Naslov</label>
+      <input class="form-control" type="text" placeholder="title" name="title"><br>
+    </div>
+    <div class="form-floating">
+      <label for="comment">Comments</label>
+      <textarea id="comment" class="form-control" name="message" style="height: 100px"></textarea><br>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Pošlji</button>
 </form>
 
   {% else %}

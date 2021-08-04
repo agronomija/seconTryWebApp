@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 from sqla_wrapper import SQLAlchemy
 from hangman import Hangman, choose_secret_word, show_known_letters, check_guessed_letter
 import os
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -281,8 +282,22 @@ def hangman():
                                            napacni_poizkusi=napacni_poizkusi, igraj_naprej=igraj_naprej, prikaz=prikaz,
                                            dosedanje_crke=dosedanje_crke)
         else:
+            user = db.query(User).filter_by(user_name=uporabnik).first()  #od tukej
+            user.number_of_tries += 1
+            pregled = Hangman(secret_word=user.secret_word, current_guessed_letter=ugibana_crka,
+                              guessed_letters=user.guessed_letters, number_of_tries=user.number_of_tries,
+                              missed_tries=user.missed_tries, correct_letters=user.correct_letters)
+
+            dosedanje_crke = user.guessed_letters
+            iskana_beseda = pregled.secret_word
+            poizkusi = pregled.number_of_tries
+            napacni_poizkusi = pregled.missed_tries
+            igraj_naprej = 'nadaljuj'
+            prikaz = pregled.show_known_letters()
+
             napacen_znak = 'Vnesli ste napačen znak, sprejemamo le črke.'
-            return render_template('hangman.html', napacen_znak=napacen_znak)
+            return render_template('hangman.html', napacen_znak=napacen_znak, poizkusi=poizkusi, iskana_beseda=iskana_beseda,
+                                   napacni_poizkusi=napacni_poizkusi, prikaz=prikaz, dosedanje_crke=dosedanje_crke) #do tukej
 
 @app.route('/fizz-buzz', methods=['GET', 'POST'])
 def fizz_buzz():
@@ -306,7 +321,8 @@ def message():
 
     if request.method == 'GET':
         messages = db.query(Message).all()
-        return render_template('messages.html', piskotek=piskotek, messages=messages)
+        cas = datetime.now()
+        return render_template('messages.html', piskotek=piskotek, messages=messages, cas=cas)
 
     #elif request.method == 'GET' and not piskotek:
      #   render_template('messages.html')

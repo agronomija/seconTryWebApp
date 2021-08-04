@@ -22,9 +22,18 @@ login
 
 
 <form method="post" action="/search_user">
-    <input type="email" name="user-email" placeholder="email@test.com"><br>
-    <input type="password" name="user-password" placeholder="enter password"><br>
-    <button type="submit" value="vpisi me">Vpiši me</button>
+
+    <div class="form-group">
+        <label for="user_email">Vpiši email</label>
+      <input class="form-control" id="user_email" type="email" name="user-email" placeholder="email@test.com">
+    </div>
+
+    <div class="form-group">
+      <label for="user_password">Vpiši geslo</label>
+      <input class="form-control" id="user_password" type="password" name="user-password" placeholder="enter password"><br>
+    </div>
+
+    <button class="btn btn-primary" type="submit" value="vpisi me">Vpiši me</button>
 </form>
 
 

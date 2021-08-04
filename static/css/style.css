@@ -6,7 +6,7 @@ background-color: aqua;
 color: red;
 text-align: center;
 align-items: space-between;
-height: 100vh;
+height: auto;
 
 }
 
@@ -16,3 +16,22 @@ background-color: white;
 }
 
 
+.o-meni {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  color: yellow;
+}
+
+.podatki {
+  display: flex;
+  flex-direction: column;
+
+}
+
+
+.boxy {
+  background: #b3ddff;
+  border: 2px solid black;
+}

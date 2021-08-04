@@ -16,7 +16,11 @@ messages
 <p>Vpiši svoje sporočilo {{piskotek}}</p>
 
   <form action="/message" method="post">
-      <textarea name="message"></textarea><br>
+      <div class="form-floating">
+
+      <label></label>
+        <textarea class="form-control" name="message"></textarea><br>
+      </div>
       <button type="submit">Potrdi sporočilo</button>
   </form>
 
@@ -28,8 +32,7 @@ messages
 
 {% if messages %}
   {% for message in messages %}
-    <h3>{{message.name}}</h3><br>
-    <p>{{message.message}}</p>
+    <p>{{message.name}}: {{message.message}}</p>
   {% endfor %}
 {% endif %}
 

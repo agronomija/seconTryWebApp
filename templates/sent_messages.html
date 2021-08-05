@@ -13,19 +13,23 @@ recieved_messages
 {% if not piskotek %}
  <p>za nadaljevanje se je potrebno vpisati</p>
 
+{% elif ni_sporocila %}
+  {{ ni_sporocila }}
+
 
 {% elif sporocila %}
 
   {% for sporocilo in sporocila %}
     {% if sporocilo.sender == piskotek %}
     <div class="privat-sporocila">
-      <p><strong>pošiljatelj: </strong> {{sporocilo.sender}}</p>
+      <p><strong>Poslal si uporabniku: </strong> {{sporocilo.reciever}}</p>
+
       <p><strong>naslov: </strong> {{sporocilo.title}}</p>
       <p><strong>sporočilo: </strong> {{sporocilo.message}}</p>
     </div>
      {% endif %}
- {% else %}
-  <p>Sporočilo je bilo uspešno poslano uporabniku {{reciever}}</p><br>
+
+
     {% endfor %}
 {% endif %}
 

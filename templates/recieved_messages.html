@@ -6,12 +6,11 @@ recieved_messages
 {% block glavnina %}
 
 
-
-
-
-
 {% if not piskotek %}
  <p>za nadaljevanje se je potrebno vpisati</p>
+
+{% elif ni_sporocila %}
+  {{ ni_sporocila }}
 
 
 {% elif sporocila %}
@@ -24,10 +23,23 @@ recieved_messages
       <p><strong>sporočilo: </strong> {{sporocilo.message}}</p>
     </div>
      {% endif %}
- {% else %}
-  <p>Sporočilo je bilo uspešno poslano uporabniku {{reciever}}</p><br>
+
+
     {% endfor %}
 {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

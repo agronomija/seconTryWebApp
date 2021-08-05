@@ -413,14 +413,25 @@ def sent_unsent():
 def recieved_messages():
     sporocila = db.query(Private_message).all()
     piskotek = request.cookies.get('user_name_test')
-    return render_template('recieved_messages.html', sporocila=sporocila, piskotek=piskotek)
+    je_sporocilo = db.query(Private_message).filter_by(reciever=piskotek).first()
+    if je_sporocilo:
+        return render_template('recieved_messages.html', sporocila=sporocila, piskotek=piskotek)
+    else:
+        ni_sporocila = 'trenutno nimate prejetih sporočil'
+        return render_template('recieved_messages.html', sporocila=sporocila, piskotek=piskotek, ni_sporocila=ni_sporocila)
 
 
 @app.route('/sent_messages')
 def sent_messages():
+
     sporocila = db.query(Private_message).all()
     piskotek = request.cookies.get('user_name_test')
-    return render_template('sent_messages.html', sporocila=sporocila, piskotek=piskotek)
+    je_sporocilo = db.query(Private_message).filter_by(sender=piskotek).first()
+    if je_sporocilo:
+        return render_template('sent_messages.html', sporocila=sporocila, piskotek=piskotek)
+    else:
+        ni_sporocila = 'trenutno nimate poslanih sporočil'
+        return render_template('sent_messages.html', sporocila=sporocila, piskotek=piskotek, ni_sporocila=ni_sporocila)
 
 
 

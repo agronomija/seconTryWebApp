@@ -3,11 +3,15 @@ from sqla_wrapper import SQLAlchemy
 from hangman import Hangman, choose_secret_word, show_known_letters, check_guessed_letter
 import os
 from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Length
+from forms import *
 
 
 app = Flask(__name__)
 db = SQLAlchemy("sqlite:///db.sqlite")
-
+app.config['SECRET_KEY'] = 'f609f25d826ca31902cbb7fae0d4c65d'
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,6 +42,7 @@ class Private_message(db.Model):
 
 
 db.create_all()
+
 
 
 
@@ -222,6 +227,8 @@ def hangman():
 
                 else:
 
+
+
                     iskana_beseda = pregled.secret_word
                     poizkusi = pregled.number_of_tries
                     napacni_poizkusi = pregled.missed_tries
@@ -270,6 +277,8 @@ def hangman():
 
 
                 else:
+
+
                     dosedanje_crke = user.guessed_letters
                     iskana_beseda = pregled.secret_word
                     poizkusi = pregled.number_of_tries
@@ -358,8 +367,9 @@ def profile():
 @app.route('/users')
 def user_search():
     users = db.query(User).all()
-    print(users[0].user_name)
+
     piskotek = request.cookies.get('user_name_test')
+
 
     return render_template('users.html', users=users, piskotek=piskotek)
 
@@ -412,9 +422,7 @@ def sent_messages():
     piskotek = request.cookies.get('user_name_test')
     return render_template('sent_messages.html', sporocila=sporocila, piskotek=piskotek)
 
-@app.route('/cv')
-def cv():
-    return render_template('CV.html')
+
 
 
 if __name__ == '__main__':
